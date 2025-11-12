@@ -41,12 +41,13 @@ func main() {
 	}()
 
 	for i := 0; i < runs; i++ {
-		fmt.Println(i+1, "/", runs)
+		fmt.Printf("\033[2K\r%d / %d (%.2f%%)", i+1, runs, float64(i+1)/runs*100)
 		_, err = svc.ListQueues(context.Background(), nil)
 		if err != nil {
 			panic(err)
 		}
 	}
+	fmt.Println()
 
 	cmd := exec.Command("pprof", "-http=localhost:9090", "-sample_index=alloc_objects", "localhost:6060/debug/pprof/allocs")
 	cmd.Stdout = os.Stdout
